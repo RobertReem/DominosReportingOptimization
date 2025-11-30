@@ -15,7 +15,6 @@ namespace DominosReportingOptimization.Controllers
         }
 
         [HttpGet("sales-unoptimized")]
-
         public async Task<IActionResult> GetSalesReportUnoptimized(
             [FromQuery] DateTime startDate,
             [FromQuery] DateTime endDate)
@@ -59,6 +58,8 @@ namespace DominosReportingOptimization.Controllers
             }
         }
 
+
+        [HttpGet("store-performance")]
         public async Task<IActionResult> GetStorePerformance()
         {
             try

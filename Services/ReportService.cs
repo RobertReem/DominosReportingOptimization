@@ -15,25 +15,37 @@ namespace DominosReportingOptimization.Services
 
         public async Task<dynamic> GetSalesReportUnoptimized(DateTime startDate, DateTime endDate)
         {
-            var orders = await _context.Orders
-                .Where(o => o.OrderDate >= startDate && o.OrderDate <= endDate)
-                .ToListAsync();
-
-            var storeIds = orders.Select(o => o.StoreId).Distinct().ToList();
-            var stores = await _context.Stores
-                .Where(s => storeIds.Contains(s.StoreId))
-                .ToListAsync();
-
-            var result = new
+            try
             {
-                TotalOrders = orders.Count,
-                TotalRevenue = orders.Sum(o => o.OrderTotal),
-                AverageOrderValue = orders.Average(o => o.OrderTotal),
-                StoreCount = stores.Count,
-                AverageDeliveryTime = orders.Average(o => o.DeliveryTimeMinutes)
-            };
+                var orders = await _context.Orders
+                    .Where(o => o.OrderDate >= startDate && o.OrderDate <= endDate)
+                    .ToListAsync();
 
-            return result;
+                if (!orders.Any())
+                {
+                    return new { TotalOrders = 0, TotalRevenue = 0m, AverageOrderValue = 0m, StoreCount = 0, AverageDeliveryTime = 0d };
+                }
+
+                var storeIds = orders.Select(o => o.StoreId).Distinct().ToList();
+                var stores = await _context.Stores
+                    .Where(s => storeIds.Contains(s.StoreId))
+                    .ToListAsync();
+
+                var result = new
+                {
+                    TotalOrders = orders.Count,
+                    TotalRevenue = orders.Sum(o => o.OrderTotal),
+                    AverageOrderValue = orders.Average(o => o.OrderTotal),
+                    StoreCount = stores.Count,
+                    AverageDeliveryTime = orders.Average(o => o.DeliveryTimeMinutes)
+                };
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error in GetSalesReportUnoptimized: {ex.Message}", ex);
+            }
         }
 
         public async Task<dynamic> GetSalesReportOptimized(DateTime startDate, DateTime endDate)
@@ -56,6 +68,13 @@ namespace DominosReportingOptimization.Services
                     AverageDeliveryTime = g.Average(x => x.order.DeliveryTimeMinutes)
                 })
                 .FirstOrDefaultAsync();
+
+            if (result == null)
+            {
+                return new { TotalOrders = 0, TotalRevenue = 0m, AverageOrderValue = 0m, StoreCount = 0, AverageDeliveryTime = 0d };
+            }
+
+
 
             return result;
         }
@@ -82,6 +101,11 @@ namespace DominosReportingOptimization.Services
                 .Take(topCount)
                 .ToListAsync();
 
+            if (result == null || !result.Any())
+            {
+                return new List<dynamic>();
+            }
+
             return result.Cast<dynamic>().ToList();
         }
 
@@ -107,6 +131,11 @@ namespace DominosReportingOptimization.Services
                 })
                 .OrderByDescending(x => x.TotalRevenue)
                 .ToListAsync();
+
+            if (result == null || !result.Any())
+            {
+                return new List<dynamic>();
+            }
 
             return result.Cast<dynamic>().ToList();
         }

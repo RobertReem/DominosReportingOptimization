@@ -17,6 +17,14 @@ builder.Services.AddScoped<ReportService>();
 
 var app = builder.Build();
 
+// Seed the Db
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var context = services.GetRequiredService<ApplicationDbContext>();
+    SeedData.Initialize(context);
+}
+
 //Configure the HTTP request pipeline
 if (app.Environment.IsDevelopment())
 {
