@@ -8,9 +8,12 @@ namespace DominosReportingOptimization.Data
         {
             if (context.Stores.Any())
             {
+                Console.WriteLine("Db already populated. NOT SEEDING FRESH DATA!!!");
                 return;
             }
-        
+                        
+            Console.WriteLine("Db NOT populated. SEEDING FRESH DATA!!!");
+
 
             // Add Stores
             var stores = new List<Store>

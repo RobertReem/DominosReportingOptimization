@@ -14,6 +14,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddScoped<ReportService>();
+builder.Services.AddScoped<StoredProcedureService>();
 
 var app = builder.Build();
 

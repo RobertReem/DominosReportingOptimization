@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using DominosReportingOptimization.Data;
 using DominosReportingOptimization.Models;
+using System.Diagnostics;
 
 namespace DominosReportingOptimization.Services
 {
@@ -15,6 +16,10 @@ namespace DominosReportingOptimization.Services
 
         public async Task<dynamic> GetSalesReportUnoptimized(DateTime startDate, DateTime endDate)
         {
+            Stopwatch stopwatch = new Stopwatch();
+
+            stopwatch.Start();
+            
             try
             {
                 var orders = await _context.Orders
@@ -30,6 +35,10 @@ namespace DominosReportingOptimization.Services
                 var stores = await _context.Stores
                     .Where(s => storeIds.Contains(s.StoreId))
                     .ToListAsync();
+
+                stopwatch.Stop();
+                TimeSpan totalElapsed = stopwatch.Elapsed;
+                Console.WriteLine($"Total time took: {totalElapsed.TotalMilliseconds} ms");
 
                 var result = new
                 {
@@ -50,6 +59,10 @@ namespace DominosReportingOptimization.Services
 
         public async Task<dynamic> GetSalesReportOptimized(DateTime startDate, DateTime endDate)
         {
+
+            Stopwatch stopwatch = new Stopwatch();
+
+            stopwatch.Start();
             var result = await _context.Orders
                 .Where(o => o.OrderDate >= startDate && o.OrderDate <= endDate)
                 .Join(
@@ -69,18 +82,23 @@ namespace DominosReportingOptimization.Services
                 })
                 .FirstOrDefaultAsync();
 
+            stopwatch.Stop();
+            TimeSpan totalElapsed = stopwatch.Elapsed;
+            Console.WriteLine($"Total time took: {totalElapsed.TotalMilliseconds} ms");
+
             if (result == null)
             {
                 return new { TotalOrders = 0, TotalRevenue = 0m, AverageOrderValue = 0m, StoreCount = 0, AverageDeliveryTime = 0d };
             }
-
-
 
             return result;
         }
 
         public async Task<List<dynamic>> GetTopProductsBySales(int topCount = 10)
         {
+            Stopwatch stopwatch = new Stopwatch();
+
+            stopwatch.Start();
             var result = await _context.OrderItems
                 .Join(
                     _context.Products,
@@ -101,16 +119,24 @@ namespace DominosReportingOptimization.Services
                 .Take(topCount)
                 .ToListAsync();
 
+            stopwatch.Stop();
+            TimeSpan totalElapsed = stopwatch.Elapsed;
+            Console.WriteLine($"Total time took: {totalElapsed.TotalMilliseconds} ms");
+
             if (result == null || !result.Any())
             {
                 return new List<dynamic>();
             }
 
+            
             return result.Cast<dynamic>().ToList();
         }
 
         public async Task<List<dynamic>> GetStorePerformance()
         {
+            Stopwatch stopwatch = new Stopwatch();
+
+            stopwatch.Start();
             var result = await _context.Orders
                 .Join(
                     _context.Stores,
@@ -132,11 +158,15 @@ namespace DominosReportingOptimization.Services
                 .OrderByDescending(x => x.TotalRevenue)
                 .ToListAsync();
 
+            stopwatch.Stop();
+            TimeSpan totalElapsed = stopwatch.Elapsed;
+            Console.WriteLine($"Total time took: {totalElapsed.TotalMilliseconds} ms");
+
             if (result == null || !result.Any())
             {
                 return new List<dynamic>();
             }
-
+            
             return result.Cast<dynamic>().ToList();
         }
     }
