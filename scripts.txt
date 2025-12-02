@@ -1,0 +1,46 @@
+#!/bin/zsh
+
+# Load testing script for Domino's Reporting Optimization API
+# This script hits all endpoints multiple times to generate Prometheus metrics data
+
+BASE_URL="http://localhost:5272/api"
+NUM_REQUESTS=50
+
+echo "🚀 Starting load test..."
+echo "Base URL: $BASE_URL"
+echo "Requests per endpoint: $NUM_REQUESTS"
+echo ""
+
+# Function to test endpoint
+test_endpoint() {
+    local endpoint=$1
+    local description=$2
+    
+    echo "Testing: $description"
+    for i in {1..$NUM_REQUESTS}; do
+        curl -s "$BASE_URL$endpoint" > /dev/null
+        if [ $((i % 10)) -eq 0 ]; then
+            echo "  Progress: $i/$NUM_REQUESTS"
+        fi
+    done
+    echo "✅ Completed: $description"
+    echo ""
+}
+
+# Test all endpoints
+test_endpoint "/reports/sales-optimized?startDate=2025-09-01&endDate=2025-11-30" "Sales Report (Optimized)"
+test_endpoint "/reports/sales-unoptimized?startDate=2025-09-01&endDate=2025-11-30" "Sales Report (Unoptimized)"
+test_endpoint "/reports/store-performance" "Store Performance"
+test_endpoint "/reports/top-products?topCount=10" "Top Products"
+
+test_endpoint "/storedprocedures/orders-optimized" "Orders with Stores (Optimized)"
+test_endpoint "/storedprocedures/orders-unoptimized" "Orders with Stores (Unoptimized)"
+test_endpoint "/storedprocedures/products-optimized" "Product Sales (Optimized)"
+test_endpoint "/storedprocedures/products-unoptimized" "Product Sales (Unoptimized)"
+test_endpoint "/storedprocedures/stores-optimized" "Store Rankings (Optimized)"
+test_endpoint "/storedprocedures/stores-unoptimized" "Store Rankings (Unoptimized)"
+
+echo "✨ Load test complete!"
+echo "View metrics at: http://localhost:5272/metrics"
+
+chmod +x load_test.zsh

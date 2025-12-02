@@ -128,3 +128,23 @@ If I were to continue this project, I'd add:
 - Database indexes on commonly filtered columns
 - More complex report filtering options
 - Frontend dashboard to visualize the data
+
+## ZSH SCRIPTS
+## brew install prometheus
+## prometheus --config.file=prometheus.yml
+
+## Open browser and go to: localhost:9090
+
+## http_request_duration_seconds_bucket
+## http_requests_received_total{handler="/metrics"}
+
+## make sure API is running, 
+## ZSH ./load_test.zsh (this will hit the endpoints 50 times)
+
+
+## This calculates the average request duration per endpoint over the last 5 minutes.
+## rate(http_request_duration_seconds_sum[5m])
+## rate(http_request_duration_seconds_count[5m])
+
+## to see just the stored procedures endpoints:
+## http_request_duration_seconds_bucket{handler=~"/api/storedprocedures.*"}

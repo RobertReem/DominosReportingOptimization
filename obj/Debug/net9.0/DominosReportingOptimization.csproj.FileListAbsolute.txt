@@ -156,3 +156,5 @@
 /Users/home/Software_Projects/DominosReportingOptimization/obj/Debug/net9.0/DominosReportingOptimization.pdb
 /Users/home/Software_Projects/DominosReportingOptimization/obj/Debug/net9.0/DominosReportingOptimization.genruntimeconfig.cache
 /Users/home/Software_Projects/DominosReportingOptimization/obj/Debug/net9.0/ref/DominosReportingOptimization.dll
+/Users/home/Software_Projects/DominosReportingOptimization/bin/Debug/net9.0/Prometheus.NetStandard.dll
+/Users/home/Software_Projects/DominosReportingOptimization/bin/Debug/net9.0/Prometheus.AspNetCore.dll

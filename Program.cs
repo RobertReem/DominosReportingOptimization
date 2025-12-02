@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using DominosReportingOptimization.Data;
 using DominosReportingOptimization.Services;
+using Prometheus;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,8 +34,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseHttpMetrics();
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
+app.MapMetrics();
 
 app.Run();
