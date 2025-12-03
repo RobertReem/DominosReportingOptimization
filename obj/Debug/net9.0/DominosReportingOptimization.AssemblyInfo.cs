@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DominosReportingOptimization")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c80e3c0e344196400176e903c968a29c49635631")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1292c5cea05f4d922da663ee82dd514f37ca2973")]
 [assembly: System.Reflection.AssemblyProductAttribute("DominosReportingOptimization")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DominosReportingOptimization")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

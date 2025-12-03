@@ -14,6 +14,7 @@ namespace DominosReportingOptimization.Controllers
             _storedProcedureService = storedProcedureService;
         }
 
+        //Simple SELECT without join
         [HttpGet("orders-unoptimized")]
         public async Task<IActionResult> GetOrdersUnoptimized()
         {
@@ -28,6 +29,7 @@ namespace DominosReportingOptimization.Controllers
             }
         }
 
+        // Single query with JOIN and window functions
         [HttpGet("orders-optimized")]
         public async Task<IActionResult> GetOrdersOptimized()
         {
@@ -42,6 +44,7 @@ namespace DominosReportingOptimization.Controllers
             }
         }
 
+        // Missing index on FK
         [HttpGet("products-unoptimized")]
         public async Task<IActionResult> GetProductsUnoptimized()
         {
@@ -56,6 +59,7 @@ namespace DominosReportingOptimization.Controllers
             }
         }
 
+        // With index on ProductId
         [HttpGet("products-optimized")]
         public async Task<IActionResult> GetProductsOptimized()
         {
@@ -70,6 +74,7 @@ namespace DominosReportingOptimization.Controllers
             }
         }
 
+        // Correlated subqueries (N+1 problem)
         [HttpGet("stores-unoptimized")]
         public async Task<IActionResult> GetStoresUnoptimized()
         {
@@ -84,6 +89,7 @@ namespace DominosReportingOptimization.Controllers
             }
         }
 
+        // Window functions and CTE
         [HttpGet("stores-optimized")]
         public async Task<IActionResult> GetStoresOptimized()
         {
